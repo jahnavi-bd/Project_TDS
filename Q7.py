@@ -1,16 +1,17 @@
 import pandas as pd
 
-# Load the users CSV file
-users_df = pd.read_csv('users.csv')
+# Load the saved repositories CSV file
+repos_df = pd.read_csv('repositories.csv')
 
-# Calculate leader_strength
-users_df['leader_strength'] = users_df['followers'] / (1 + users_df['following'])
+# Remove rows where 'language' is empty or NaN
+repos_df = repos_df[repos_df['language'].notnull() & (repos_df['language'] != '')]
 
-# Get the top 5 users based on leader_strength
-top_leaders = users_df.nlargest(5, 'leader_strength')
+# Group by language and calculate the average number of stars
+average_stars = repos_df.groupby('language')['stargazers_count'].mean()
 
-# Extract the logins and format as a comma-separated string
-top_leader_logins = ', '.join(top_leaders['login'].tolist())
+# Find the language with the highest average stars
+highest_average_language = average_stars.idxmax()
+highest_average_value = average_stars.max()
 
 # Output the result
-print(f"Top 5 users in terms of leader_strength: {top_leader_logins}")
+print(f"Language with the highest average number of stars per repository: {highest_average_language} ({highest_average_value:.2f} stars)")
