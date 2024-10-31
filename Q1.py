@@ -1,18 +1,7 @@
 import pandas as pd
+# Sort users by the number of followers and get the top 5 users
+top_users = sorted(user_details, key=lambda x: x['followers'], reverse=True)[:5]
+top_user_logins = [user['login'] for user in top_users]
 
-# Load users from CSV
-users_df = pd.read_csv('users.csv')
-
-# Filter for users in Melbourne
-melbourne_users = users_df[users_df['location'].str.contains('Melbourne', case=False, na=False)]
-
-# Convert followers to numeric
-melbourne_users['followers'] = pd.to_numeric(melbourne_users['followers'], errors='coerce')
-
-# Get the top 5 users with the highest followers
-top_users = melbourne_users.nlargest(5, 'followers')
-
-# Extract their logins and format as a comma-separated string
-top_user_logins = ', '.join(top_users['login'].tolist())
-
-print(f"Top 5 users in Melbourne by followers: {top_user_logins}")
+# Output the logins in order without space after the comma
+print("Top 5 users in Melbourne: " + ",".join(top_user_logins))
