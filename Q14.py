@@ -18,7 +18,7 @@ weekend_counts = weekend_repos['login'].value_counts()
 # Get the top 5 users
 top_weekend_users = weekend_counts.head(5).index.tolist()
 
-# Format the result as a comma-separated string
-result = ', '.join(top_weekend_users)
+# Format the result as a comma-separated string without spaces
+result = ','.join(top_weekend_users)
 
 print(f"Top 5 users with the most repositories created on weekends: {result}")
