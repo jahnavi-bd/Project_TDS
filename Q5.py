@@ -1,28 +1,26 @@
-import pandas as pd
+from collections import Counter
 
-# Load the saved CSV files
-users_df = pd.read_csv('users.csv')
-repos_df = pd.read_csv('repositories.csv')
+# Function to calculate the most popular programming language
+def most_popular_language(repositories):
+    # Extract all the programming languages from the repositories
+    languages = [repo['language'] for repo in repositories if repo['language']]
+    
+    # Use Counter to find the most common language
+    language_count = Counter(languages)
+    
+    # Get the most common language
+    most_common_language = language_count.most_common(1)
+    
+    if most_common_language:
+        return most_common_language[0]  # (language, count)
+    else:
+        return None
 
-# Convert the created_at column to datetime
-users_df['created_at'] = pd.to_datetime(users_df['created_at'])
+# Get the most popular programming language
+popular_language = most_popular_language(all_repositories)
 
-# Filter users who joined after January 1, 2021
-filtered_users = users_df[users_df['created_at'] > '2021-01-01']
-
-# Gather languages from repositories of these users
-language_counts = repos_df[repos_df['login'].isin(filtered_users['login'])]['language'].value_counts()
-
-# Identify the second most popular language
-most_common_languages = language_counts.nlargest(2)
-
-if len(most_common_languages) > 1:
-    second_most_popular_language = most_common_languages.index[1]  # Get the second one
+# Display the result
+if popular_language:
+    print(f"The most popular programming language among these users is: {popular_language[0]}")
 else:
-    second_most_popular_language = None
-
-# Output the second most popular language
-if second_most_popular_language:
-    print("Second most popular programming language:", second_most_popular_language)
-else:
-    print("No second most popular language found.")
+    print("No repositories with specified languages were found.")
